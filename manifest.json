@@ -1,0 +1,21 @@
+{
+  "name": "Go To Anywhere",
+  "description": "Launch actions using global auto-complete pop-up. Actions include switching tabs, opening browser links, etc.",
+  "version": "0.1",
+  "manifest_version": 2,
+  "permissions": ["tabs", "bookmarks", "*://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["page.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon" : "icon.png",
+    "default_title": "Go To Anywhere",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}

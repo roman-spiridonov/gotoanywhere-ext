@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            width: 400px;
+        }
+        tr {
+            whitespace: nowrap;
+        }
+        td {
+            padding: 5px;
+        }
+        #requestResult, #connectResult {
+            text-align: right;
+            min-width: 60px;
+        }
+    </style>
+</head>
+<body>
+<h1>Go to Anywhere</h1>
+<p>Opened with Shift+Shift and use auto-complete list below to fire any available action.</p>
+
+<p>Test connectivity:</p>
+<table>
+    <tr>
+        <td><button id="requestButton">One-time message</button></td>
+        <td><span id="requestResult"></span></td>
+    </tr>
+    <tr>
+        <td><button id="connectButton">Long-lived message</button></td>
+        <td><span id="connectResult"></span></td>
+    </tr>
+</table>
+
+
+<p>Auto-complete:</p>
+<form onsubmit="console.log('clicked submit!'); return false;">
+    <input type="text"><br/>
+</form>
+<script src="timer.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

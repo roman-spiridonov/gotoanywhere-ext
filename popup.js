@@ -1,59 +1,27 @@
-/**
- * Test simple one-time request.
- */
-function testRequest() {
-    printResult("requestResult", "running...");
+$(function () {
+    var data = JSON.parse(localStorage.getItem('db'));
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var timer = new Timer();
-        timer.start();
-        var tab = tabs[0];
-        chrome.tabs.sendMessage(tab.id, {counter: 1}, function handler(response) {
-            if (response.counter < 1000) {
-                chrome.tabs.sendMessage(tab.id, {counter: response.counter}, handler);
-            } else {
-                timer.stop();
-                var misec = Math.round(timer.milliseconds() / response.counter * 100) / 100;
-                console.log(misec);
-                printResult("requestResult", misec + " ms / request");
-            }
-        });
+    $('#search').select2({
+        placeholder: "Type action to search...",
+        allowClear: true,
+        data: data,
+        escapeMarkup: function (markup) {  // disable removing mark-up
+            return markup;
+        },
+        templateResult: function (item) {  // return item markup in options list (expanded)
+            var tmpl = _.template(document.getElementById('option-template').innerHTML, {'variable': 'item'});
+            return tmpl(item);
+        },
+        templateSelection: function (item) {  // return selected item markup (collapsed)
+            return item.selectedText;
+        }
     });
-}
 
-/**
- * Test long-lived connection messages.
- */
-function testConnect() {
-    printResult("connectResult", "running...");
-
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var timer = new Timer();
-        timer.start();
-
-        var port = chrome.tabs.connect(tabs[0].id);
-        console.log("Connected to port ", port);
-        port.postMessage({counter: 1});
-        port.onMessage.addListener(function getResp(response) {
-            if (response.counter < 1000) {
-                port.postMessage({counter: response.counter});
-            } else {
-                timer.stop();
-                var misec = Math.round(timer.milliseconds() / response.counter * 100) / 100;
-                printResult("connectResult", misec + " ms / message");
-            }
-        });
+    $('#search').on('select2:select', function (e) {
+        console.log("selected tab", e.params.data.tab);
+        chrome.tabs.update(e.params.data.tab.id, {active: true});
     });
-}
 
-function printResult(elementId, text) {
-    document.getElementById(elementId).innerText = text;
-}
+    $('#search').select2('open');
 
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('requestButton').addEventListener(
-        'click', testRequest);
-    document.getElementById('connectButton').addEventListener(
-        'click', testConnect);
 });

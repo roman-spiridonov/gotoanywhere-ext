@@ -3,7 +3,9 @@
 <head>
     <style>
         body {
-            width: 400px;
+            width: 300px;
+            margin: 5px;
+            font: 14px/18px Open Sans,Arial,Helvetica,sans-serif;
         }
         tr {
             whitespace: nowrap;
@@ -15,13 +17,35 @@
             text-align: right;
             min-width: 60px;
         }
+
+        .select__option {
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .select__optionText {
+            display: inline;
+
+        }
+        .select__type {
+            border: 1px solid #363636;
+            border-radius: 5px;
+            background: #5e5e5e;
+            color: white;
+            float: right;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+
 </head>
 <body>
 <h1>Go to Anywhere</h1>
-<p>Opened with Shift+Shift and use auto-complete list below to fire any available action.</p>
+<p>Opened with <b>Ctrl+Shift+A</b> and use auto-complete list below to fire any available action.</p>
 
-<p>Test connectivity:</p>
+<p>Test connectivity with tabs:</p>
 <table>
     <tr>
         <td><button id="requestButton">One-time message</button></td>
@@ -36,9 +60,22 @@
 
 <p>Auto-complete:</p>
 <form onsubmit="console.log('clicked submit!'); return false;">
-    <input type="text"><br/>
+    <!--<input type="text"><br/>-->
+    <input type="select" class="search" id="search" autofocus>
 </form>
+
+
+<script src="dbInit.js"></script>
+<script src="extension.js"></script>
 <script src="timer.js"></script>
 <script src="popup.js"></script>
+<script src="messaging-test.js"></script>
+
+<script type="text/template" id="option-template">
+    <div class="select__option">
+        <span class="select__type"><%=item.type%></span>
+        <span class="select__optionText"><%=item.text%></span>
+    </div>
+</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 **GoToAnywhere** is Chrome extension that allows you to launch actions quickly using auto-complete pop-up. Actions include switching tabs, opening browser links, etc.
 
+[[https://github.com/roman-spiridonov/gotoanywhere-ext/blob/develop/example/screen.png|alt=Screeshot]]
+
 # Usage
 1. Install 
 ```

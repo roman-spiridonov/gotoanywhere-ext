@@ -17,3 +17,5 @@ Timer.prototype.reset = function () {
 Timer.prototype.milliseconds = function () {
     return this._timer.toFixed(3);
 };
+
+exports.Timer = Timer;

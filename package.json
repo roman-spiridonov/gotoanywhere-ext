@@ -1,0 +1,37 @@
+{
+  "name": "gotoanywhere-ext",
+  "version": "0.0.1",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "lodash": "^4.17.4",
+    "select2": "^4.0.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "del": "^2.2.2",
+    "gulp-debug": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-if": "^2.0.2",
+    "gulp-newer": "^1.3.0",
+    "gulp-sourcemaps": "^2.4.0",
+    "path": "^0.12.7",
+    "webpack": "^1.14.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roman-spiridonov/gotoanywhere-ext.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roman-spiridonov/gotoanywhere-ext/issues"
+  },
+  "homepage": "https://github.com/roman-spiridonov/gotoanywhere-ext#readme"
+}

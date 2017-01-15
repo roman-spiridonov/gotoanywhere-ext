@@ -1,4 +1,3 @@
-require('select2');
 var _ = require('lodash');
 
 exports.GTASelect = function GTASelect(options) {

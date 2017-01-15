@@ -1,4 +1,8 @@
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development';
+if(!isDevelopment) {
+    console.log('Webpack: executing a production build!');
+}
+
 const webpack = require('webpack');
 var path = require('path');
 

@@ -7,6 +7,9 @@ const del = require('del');
 const webpack = require('webpack');
 
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development';
+if(!isDevelopment) {
+    console.log('Gulp: executing a production build!');
+}
 
 gulp.task('static', function () {
     return gulp.src('src/*.{css,html,png,json}', {buffer: false}).pipe(debug())

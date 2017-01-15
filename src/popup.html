@@ -1,45 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <style>
-        body {
-            width: 300px;
-            margin: 5px;
-            font: 14px/18px Open Sans,Arial,Helvetica,sans-serif;
-        }
-        tr {
-            whitespace: nowrap;
-        }
-        td {
-            padding: 5px;
-        }
-        #requestResult, #connectResult {
-            text-align: right;
-            min-width: 60px;
-        }
-
-        .select__option {
-            max-height: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .select__optionText {
-            display: inline;
-
-        }
-        .select__type {
-            border: 1px solid #363636;
-            border-radius: 5px;
-            background: #5e5e5e;
-            color: white;
-            float: right;
-        }
-    </style>
+    <link rel="stylesheet" href="popup.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-
 </head>
 <body>
 <h1>Go to Anywhere</h1>
@@ -66,8 +32,8 @@
 
 
 
-<script src="popup.min.js"></script>
-<script src="messagingTest.min.js"></script>
+<script src="popup.js"></script>
+<script src="messagingTest.js"></script>
 
 <script type="text/template" id="option-template">
     <div class="select__option">

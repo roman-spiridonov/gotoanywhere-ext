@@ -1,4 +1,3 @@
-const $ = require('jquery');
 const extension = require('./extension');
 const GTASelect = require('./GTASelect').GTASelect;
 const dbInit = require('./dbInit');

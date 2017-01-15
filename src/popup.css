@@ -1,0 +1,32 @@
+body {
+    width: 300px;
+    margin: 5px;
+    font: 14px/18px Open Sans,Arial,Helvetica,sans-serif;
+}
+tr {
+    whitespace: nowrap;
+}
+td {
+    padding: 5px;
+}
+#requestResult, #connectResult {
+    text-align: right;
+    min-width: 60px;
+}
+
+.select__option {
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.select__optionText {
+    display: inline;
+
+}
+.select__type {
+    border: 1px solid #363636;
+    border-radius: 5px;
+    background: #5e5e5e;
+    color: white;
+    float: right;
+}

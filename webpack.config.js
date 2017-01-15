@@ -11,8 +11,9 @@ module.exports = {
     },
     output: {
         path: 'webapp',
-        filename: '[name].min.js'
-        // library: '[name]'
+        publicPath: '/',   // internet path for require.ensure
+        filename: '[name].js'
+        // library: '[name]'  // exports global var
     },
     externals: {
         "jquery": "$",
@@ -24,42 +25,55 @@ module.exports = {
         aggregateTimeout: 100
     },
 
-    devtool: isDevelopment ? "eval" : null,
+    devtool: isDevelopment ? "#inline-source-map" : null,
+
+    module: {
+        loaders: [
+            {  // change code and its source map
+                test: /\.js$/,
+                include: path.join(__dirname, 'src'),  // better than exclude: /(node_modules|bower_components)/
+                loader: 'babel',
+                query: {  // loader: 'babel?presets[]=es2015'  // old syntax
+                    presets: ['es2015']
+                }
+            }, {
+                test: /\.css$/,
+                loaders: ["style", "css"]  // loader: 'style!css'  // old syntax
+            }, {
+                test: /\.(png|jpe?g|gif|svg|json)$/i,
+                loader: 'file?name=[path][name].[ext]'
+            }],
+        noParse: /(jquery\.js|lodash\.js)/  // libs that don't need any parsing
+    },
 
     plugins: [
         new webpack.DefinePlugin({
             NODE_ENV: JSON.stringify(isDevelopment ? "development" : "production")
         }),
-        new webpack.ResolverPlugin(
-            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
-        )
+        new webpack.NoErrorsPlugin(),
+        new webpack.ProvidePlugin({  // automated require on free variable
+            $: 'jquery'
+        })
     ],
 
-    module: {
-        loaders: [{  // change code and its source map
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            loader: 'babel?presets[]=es2015',
-            // query: {
-            //     presets: ['es2015']
-            // }
-
-        }]
-    },
 
     resolve: {  // override defaults
-        moduleDirectories: ['node_modules', 'bower_components'],
-        // extensions: ['', '.js']
+        root: path.join(__dirname, 'vendor'),  // add another root for require
+        alias: {  // alias: path
+
+        },
+        moduleDirectories: ['node_modules'],
+        extensions: ['', '.js']
     },
     resolveLoader: {  // override defaults
-        moduleDirectories: ['node_modules', 'bower_components'],
-        // moduleTemplates: ['*-loader', '*'],
-        // extensions: ['', '.js']
+        moduleDirectories: ['node_modules'],
+        moduleTemplates: ['*-loader', '*'],
+        extensions: ['', '.js']
     }
 
 };
 
-// if (!isDevelopment) {
+if (!isDevelopment) {
     module.exports.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -69,4 +83,4 @@ module.exports = {
             }
         })
     );
-// }
+}

@@ -1,4 +1,3 @@
-const $ = require('jquery');
 const Timer = require('./timer').Timer;
 
 /**

@@ -1,6 +1,5 @@
-const $ = require('jquery');
 require('select2');
-const _ = require('lodash');
+var _ = require('lodash');
 
 exports.GTASelect = function GTASelect(options) {
     // var data = options.data || [];

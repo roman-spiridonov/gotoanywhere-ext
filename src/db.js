@@ -1,5 +1,6 @@
-function dbInit() {
-    if (!chrome.tabs) {
+exports.dbInit = function (prepopulate) {
+    prepopulate = prepopulate || false;
+    if (prepopulate) {  // when launched in browser context
         var data = [{
             id: "0",
             source: "content",
@@ -24,9 +25,24 @@ function dbInit() {
         }];  // some test data
         localStorage.setItem("db", JSON.stringify(data));
         return data;
-    } else {
-        return localStorage.getItem('db') || (localStorage.clear(), []);
-    }
-}
 
-module.exports = dbInit;
+    } else {
+        return (localStorage.clear(), localStorage.setItem('db', []), []);  // clear at the first start (removes data from previous browser sessions)
+    }
+};
+
+exports.parseDbStr = function (curDbStr) {
+    let curDb;
+    if (curDbStr) {  // if not empty
+        try {
+            curDb = JSON.parse(curDbStr);
+        } catch (e) {
+            console.error('Could not parse JSON from local storage. Returned empty array.\n', e);
+            return [];
+        }
+    } else {
+        curDb = [];
+    }
+
+    return curDb;
+};

@@ -1,10 +1,13 @@
-var _ = require('lodash');
+const _ = require('lodash');
+const extension = require('./extension');
+const db = require('./db');
 
 exports.GTASelect = function GTASelect(options) {
     // var data = options.data || [];
     var $el;
 
-    this.init = function(selector, data) {
+    this.init = function (selector, data) {
+        console.dir(data);
         $el = $(selector);
         $el.select2({
             placeholder: "Type action to search...",
@@ -29,34 +32,36 @@ exports.GTASelect = function GTASelect(options) {
     };
 
     function action(e) {
-        if(!chrome.tabs) return;
+        if (!chrome.tabs) return;
         console.log("selected tab", e.params.data.tab);
         chrome.tabs.update(e.params.data.tab.id, {active: true});
     }
 
-    this.open = function() {
+    this.open = function () {
         $el.select2("open");
     };
 
+    this.setData = function (data) {
+        $el.data('select2').results.data._currentData = data;
+    };
 
-    this.update = function() {  // TODO: rewrite to use internal data
-        let curDb = localStorage.getItem('db');
-        if (curDb) {
-            let data = JSON.parse(curDb);
-            // console.log("search.data = ", $("#search").data('select2'));
-            let currentData = $("#search").data('select2').results.data._currentData;
-            if (data) {
-                data.forEach(function (item) {
-                    setTimeout(() => {  // TODO: use async or promise
-                        if ($.inArray(item.id, currentData.map(function (el) {
-                                return el.id;
-                            })) === -1) {  // TODO: use map
+    this.update = function () {  // TODO: rewrite to use internal data
+        let curDbStr = localStorage.getItem('db');
+        let data = db.parseDbStr(curDbStr);
+        if (data.length > 0) {
+            let currentData = $el.data('select2').results.data._currentData;
+            data.forEach(function (item) {
+                setTimeout(() => {  // TODO: use async or promise
+                    try{
+                        if (extension.indexOfById(item, currentData) === -1) {  // TODO: use map
                             currentData.push(item);
                         }
-                    });
-                });
-            }
+                    } catch(e) {
+                        return;
+                    }
+                }, 0);
+            });
         }
-    }
+    };
 
 };

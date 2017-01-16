@@ -1,4 +1,5 @@
 const helpers = require('./helpers');
+const db = require('./db');
 
 /**
  * Scans tabs and saves to local storage.
@@ -13,17 +14,18 @@ function updateTabs() {
                     source: "tab",
                     type: "tab",
                     selectedText: tab.title,
-                    text: tab.title,
+                    text: tab.url + '\n' + tab.title,
                     tab: tab
                 };
-                console.log("Saving tab to localStorage: ", tab);
-                let curDb = localStorage.getItem('db');
-                // console.log('Current state of db: ', curDb);
-                if (curDb && curDb.length) {
-                    if ($.inArray(dbEntry.id, JSON.parse(curDb).map(function (el) {
-                            return el.id;
-                        })) === -1) {  // TODO: use map
-                        localStorage.setItem('db', curDb.slice(0, -1).concat(',', JSON.stringify(dbEntry), ']'));
+                console.log("Saving tab to localStorage: ", tab.title);
+                let curDbStr = localStorage.getItem('db');
+                let curDb = db.parseDbStr(curDbStr);
+                if (curDb.length > 0) {
+                    console.log("Current state of db: ", curDb.map(item => item.id));
+                    let tabIndex = indexOfById(dbEntry, curDb);
+                    if (tabIndex === -1) {
+                        console.log("dbEntry: ", dbEntry.id);
+                        localStorage.setItem('db', curDbStr.slice(0, -1).concat(',', JSON.stringify(dbEntry), ']'));
                     }
                 } else {
                     localStorage.setItem('db', ''.concat('[', JSON.stringify(dbEntry), ']'));
@@ -31,8 +33,19 @@ function updateTabs() {
             }, 0);
         });
 
-        console.log("Updated localStorage with all the tabs: ", JSON.parse(localStorage['db']));
     });
 }
 
+
+function indexOfById(dbEntry, arr) {
+    try {
+        let keys = arr.map(el => el.id);
+        return keys.indexOf(dbEntry.id);
+    } catch(e) {
+        return null;
+    }
+}
+
+
 exports.updateTabs = updateTabs;
+exports.indexOfById = indexOfById;

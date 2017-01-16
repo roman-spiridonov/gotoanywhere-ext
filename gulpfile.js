@@ -12,7 +12,7 @@ if(!isDevelopment) {
 }
 
 gulp.task('static', function () {
-    return gulp.src('src/*.{css,html,png,json}', {buffer: false}).pipe(debug())
+    return gulp.src('src/*.{css,html,png,json}', {buffer: false, since: gulp.lastRun('static')}).pipe(debug())
         .pipe(gulp.dest('webapp')).pipe(debug())
 });
 

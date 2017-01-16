@@ -9,9 +9,10 @@ var path = require('path');
 module.exports = {
     context: path.join(__dirname, 'src'),
     entry: {
-        popup: './popup.js',  // extension (popup) script
-        messagingTest: './messagingTest.js',
-        page: './page.js'  // content script
+        popup: './popup.js',  // extension's popup script
+        background: './background.js',  // background script
+        page: './page.js',  // content script
+        messagingTest: './messagingTest.js'
     },
     output: {
         path: 'webapp',
@@ -29,7 +30,7 @@ module.exports = {
         aggregateTimeout: 100
     },
 
-    devtool: isDevelopment ? "#inline-source-map" : null,
+    devtool: isDevelopment ? "eval" : null,
 
     module: {
         loaders: [

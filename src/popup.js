@@ -1,15 +1,20 @@
 const extension = require('./extension');
 const GTASelect = require('./GTASelect').GTASelect;
-const dbInit = require('./dbInit');
+const db = require('./db');
 
 $(function () {
-    dbInit();
-    var data = JSON.parse(localStorage.getItem('db'));
-    var searchBox = new GTASelect();
+    let data;
+    if (!chrome.tabs) { // populate the db with test data if launched in browser context
+        data = db.dbInit(true);
+    } else {
+        data = db.parseDbStr(localStorage.getItem('db'));
+    }
+
+    let searchBox = new GTASelect();
     searchBox.init('#search', data);
 
-    var timerId = setInterval(() => {  // TODO: update on the fly instead of setInterval
-        extension.updateTabs();
+    // searchBox.update();
+    setInterval(() => {  // TODO: update on the fly instead of setInterval
         searchBox.update();
     }, 1000);
 

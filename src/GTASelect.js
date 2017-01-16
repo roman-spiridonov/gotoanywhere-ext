@@ -1,9 +1,10 @@
 const _ = require('lodash');
 const extension = require('./extension');
-const db = require('./db');
+const DbWrapper = require('./db/dbWrapper');
+const db = require('./db/index').db;
 
-exports.GTASelect = function GTASelect(options) {
-    // var data = options.data || [];
+exports.GTASelect = function GTASelect() {
+    var _state;  // array of options
     var $el;
 
     this.init = function (selector, data) {
@@ -12,7 +13,7 @@ exports.GTASelect = function GTASelect(options) {
         $el.select2({
             placeholder: "Type action to search...",
             allowClear: true,
-            data: data,
+            // data: _db.get(),
             escapeMarkup: function (markup) {  // disable removing mark-up
                 return markup;
             },
@@ -45,21 +46,14 @@ exports.GTASelect = function GTASelect(options) {
         $el.data('select2').results.data._currentData = data;
     };
 
-    this.update = function () {  // TODO: rewrite to use internal data
-        let curDbStr = localStorage.getItem('db');
-        let data = db.parseDbStr(curDbStr);
-        if (data.length > 0) {
+    this.update = function () {
+        _state = db.get();
+        if (_state.length > 0) {
             let currentData = $el.data('select2').results.data._currentData;
-            data.forEach(function (item) {
-                setTimeout(() => {  // TODO: use async or promise
-                    try{
-                        if (extension.indexOfById(item, currentData) === -1) {  // TODO: use map
-                            currentData.push(item);
-                        }
-                    } catch(e) {
-                        return;
-                    }
-                }, 0);
+            _state.forEach(function (item) {
+                setTimeout(() => {
+                    currentData.push(item);
+                });
             });
         }
     };

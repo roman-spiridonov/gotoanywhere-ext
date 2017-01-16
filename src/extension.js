@@ -1,5 +1,5 @@
 const helpers = require('./helpers');
-const db = require('./db');
+const db = require('./db').db;
 
 /**
  * Scans tabs and saves to local storage.
@@ -18,34 +18,11 @@ function updateTabs() {
                     tab: tab
                 };
                 console.log("Saving tab to localStorage: ", tab.title);
-                let curDbStr = localStorage.getItem('db');
-                let curDb = db.parseDbStr(curDbStr);
-                if (curDb.length > 0) {
-                    console.log("Current state of db: ", curDb.map(item => item.id));
-                    let tabIndex = indexOfById(dbEntry, curDb);
-                    if (tabIndex === -1) {
-                        console.log("dbEntry: ", dbEntry.id);
-                        localStorage.setItem('db', curDbStr.slice(0, -1).concat(',', JSON.stringify(dbEntry), ']'));
-                    }
-                } else {
-                    localStorage.setItem('db', ''.concat('[', JSON.stringify(dbEntry), ']'));
-                }
+                db.push(dbEntry);
             }, 0);
         });
-
     });
 }
 
 
-function indexOfById(dbEntry, arr) {
-    try {
-        let keys = arr.map(el => el.id);
-        return keys.indexOf(dbEntry.id);
-    } catch(e) {
-        return null;
-    }
-}
-
-
 exports.updateTabs = updateTabs;
-exports.indexOfById = indexOfById;

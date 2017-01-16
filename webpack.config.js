@@ -30,7 +30,7 @@ module.exports = {
         aggregateTimeout: 100
     },
 
-    devtool: isDevelopment ? "eval" : null,
+    devtool: isDevelopment ? "source-map" : null,
 
     module: {
         loaders: [

@@ -14,8 +14,8 @@ function LocalStorageDb(options) {
      * Update state from db.
      */
     this.refresh = function () {
-        _data = _getDb();
-        _changeSet = 0; _stagedClear = false;  // TODO: update logic
+        self._data = _getDb().getMap();
+        _changeSet = []; _stagedClear = false;  // TODO: update logic
     };
 
     /**
@@ -28,7 +28,6 @@ function LocalStorageDb(options) {
         }
         let curDb = _getDb();
         _changeSet.forEach((change) => {
-            self.refresh();
             let dbEntry = change.dbEntry;
             if (change.action === "add") {  // adding element
                 curDb.push(dbEntry);
@@ -36,6 +35,8 @@ function LocalStorageDb(options) {
                 curDb.delete(dbEntry);
             }
         });
+
+        localStorage.setItem('db', JSON.stringify(curDb.get()));
     };
 
     this.saveEntry = function(dbEntry) {
@@ -43,7 +44,7 @@ function LocalStorageDb(options) {
         let curDb = _parseDbStr(curDbStr);
         if (curDb.length > 0) {
             //console.log("Current state of db: ", curDb.map(item => item.id));
-            let index = this.indexOf(dbEntry, curDb);
+            let index = self.indexOf(dbEntry, curDb);
             if (index === -1) {
                 console.log("dbEntry: ", dbEntry.id);
                 localStorage.setItem('db', curDbStr.slice(0, -1).concat(',', JSON.stringify(dbEntry), ']'));
@@ -56,6 +57,11 @@ function LocalStorageDb(options) {
     };
 
     function _getDb() {
+        let curDbStr = localStorage.getItem(_dbKey);
+        return new DbWrapper({data: _parseDbStr(curDbStr)});
+    }
+
+    function _getData() {
         let curDbStr = localStorage.getItem(_dbKey);
         return _parseDbStr(curDbStr);
     }
@@ -70,19 +76,20 @@ function LocalStorageDb(options) {
                 return curDb;
             }
         }
-        return new DbWrapper(curDb);
+        return curDb;
     }
 
-
+    var parentClear = this.clear;
     this.clear = function () {
-        DbWrapper.apply(this, arguments);
+        parentClear(arguments);
         _stagedClear = true;
         _changeSet.length = 0;
     };
 
+    var parentPush = this.push;
     this.push = function (dbEntry) {  // checks for duplicates
-        DbWrapper.apply(this, arguments);
-        return _changeSet.push({action: "add", dbEntry: dbEntry});
+        parentPush(dbEntry);
+        _changeSet.push({action: "add", dbEntry: dbEntry});
     };
 
 

@@ -1,50 +1,64 @@
 function DbWrapper(options) {
-    var _data = _set(options.data);
+    this._data = _parse(options.data);
 
-    function _set(data) {
-        if (typeof data === Array && data[0].id) {
+    var self = this;
+
+    function _parse(data) {
+        if(!data) {
+            return new Map;
+        } else if (data.constructor == Array && data.length > 0 && data[0].id) {
             try {
-                _data = data.map((elem) => [elem.id, elem]);
+                return new Map(data.map((elem) => [elem.id, elem]));
             } catch(e) {
                 console.error("Could not initialize the db with the provided data. Assigned empty db.");
-                _data = new Map;
+                return new Map;
             }
         } else {
             try {
-                _data = new Map(data);
+                return new Map(data);
             } catch (e) {
                 console.error("Could not initialize the db with the provided data. Assigned empty db.");
-                _data = new Map;
+                return new Map;
             }
         }
     }
-    this.set = _set;
+
+    this.set = function(data) {
+        let parsedData = _parse(data);
+        if(parsedData.size) {
+            this._data = parsedData;
+        }
+    };
 
     this.clear = function () {
-        _data.clear();
+        if(self._data) self._data.clear();
     };
 
     this.push = function (dbEntry) {  // checks for duplicates
         if(!dbEntry.id) throw new Error("The database element should have an id!");
-        _data.set(dbEntry.id, dbEntry);
+        self._data.set(dbEntry.id, dbEntry);
         return dbEntry;
     };
 
     this.get = function() {
         if(arguments.length === 1) {
             let id = arguments[0];
-            return _data.get(id);
+            return self._data.get(id);
         }
 
-        return Array.from(_data.values());
+        return Array.from(self._data.values());
+    };
+
+    this.getMap = function() {
+        return self._data;
     };
 
     this.has = function (dbEntry) {
-        return _data.has(dbEntry.id);
+        return self._data.has(dbEntry.id);
     };
 
     this.delete = function(dbEntry) {
-        _data.delete(dbEntry.id);
+        self._data.delete(dbEntry.id);
     }
 
 }

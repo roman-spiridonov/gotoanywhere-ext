@@ -5,9 +5,10 @@ const db = require('./db').db;
 
 $(function () {
     let searchBox = new GTASelect({db: db});
-    searchBox.init('#search');
+    db.refresh();
+    searchBox.init('#search', db.get());
 
-    // searchBox.update();
+    //searchBox.update();
     setInterval(() => {  // TODO: update on the fly instead of setInterval
         searchBox.update();
     }, 1000);

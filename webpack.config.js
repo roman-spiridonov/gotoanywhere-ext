@@ -30,7 +30,7 @@ module.exports = {
         aggregateTimeout: 100
     },
 
-    devtool: isDevelopment ? "source-map" : null,
+    devtool: isDevelopment ? "#cheap-module-inline-source-map" : null,
 
     module: {
         loaders: [

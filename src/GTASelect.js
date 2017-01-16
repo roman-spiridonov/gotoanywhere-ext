@@ -8,12 +8,11 @@ exports.GTASelect = function GTASelect() {
     var $el;
 
     this.init = function (selector, data) {
-        console.dir(data);
         $el = $(selector);
         $el.select2({
             placeholder: "Type action to search...",
             allowClear: true,
-            // data: _db.get(),
+            data: data || [],
             escapeMarkup: function (markup) {  // disable removing mark-up
                 return markup;
             },
@@ -47,10 +46,17 @@ exports.GTASelect = function GTASelect() {
     };
 
     this.update = function () {
+        if (chrome.tabs) {
+            db.refresh();
+        }
         _state = db.get();
+        console.dir(_state);
+
         if (_state.length > 0) {
             let currentData = $el.data('select2').results.data._currentData;
+            let ids = currentData.map(el => el.id);
             _state.forEach(function (item) {
+                if (ids.indexOf(item.id) !== -1) return;
                 setTimeout(() => {
                     currentData.push(item);
                 });

@@ -4,7 +4,7 @@ const db = require('./db').db;
 /**
  * Scans tabs and saves to local storage.
  */
-function updateTabs() {
+function updateTabs() {  // TODO: handle removal of tabs
     if (!chrome.tabs) return; // execute only in extension context
     chrome.tabs.query({}, function (tabs) {
         tabs.forEach(function (tab) {  // async forEach
@@ -19,6 +19,7 @@ function updateTabs() {
                 };
                 console.log("Saving tab to localStorage: ", tab.title);
                 db.push(dbEntry);
+                db.save();
             }, 0);
         });
     });

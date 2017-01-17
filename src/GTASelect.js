@@ -1,6 +1,9 @@
+/* global NODE_ENV */
 "use strict";
 
-const _ = require('lodash');
+// Rely on CDN version in production. NODE_ENV resolved via webpack.
+const template = NODE_ENV === 'development' ? require('lodash/template') : _.template;
+
 const db = require('./db/index').db;
 
 exports.GTASelect = function GTASelect() {
@@ -17,7 +20,7 @@ exports.GTASelect = function GTASelect() {
         return markup;
       },
       templateResult: function (item) {  // return item markup in options list (expanded)
-        let tmpl = _.template(document.getElementById('option-template').innerHTML, {'variable': 'item'});
+        let tmpl = template(document.getElementById('option-template').innerHTML, {'variable': 'item'});
         return tmpl(item);
       },
       templateSelection: function (item) {  // return selected item markup (collapsed)
@@ -48,9 +51,9 @@ exports.GTASelect = function GTASelect() {
   };
 
   this.update = function () {
-    if (chrome.tabs) {
-      db.refresh();
-    }
+    // if (chrome.tabs) {
+    //   db.refresh();
+    // }
     _state = db.get();
     console.dir(_state);
 
@@ -58,7 +61,9 @@ exports.GTASelect = function GTASelect() {
       let currentData = $el.data('select2').results.data._currentData;
       let ids = currentData.map(el => el.id);
       _state.forEach(function (item) {
-        if (ids.indexOf(item.id) !== -1) { return; }
+        if (ids.indexOf(item.id) !== -1) {
+          return;
+        }
         setTimeout(() => {
           currentData.push(item);
         });

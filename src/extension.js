@@ -23,7 +23,7 @@ function updateTabs() {  // TODO: handle removal of tabs
         };
         console.log("Saving tab to localStorage: ", tab.title);
         db.push(dbEntry);
-        db.save();
+        // db.save();
       }, 0);
     });
   });

@@ -7,7 +7,8 @@ module.exports = {
   "extends": "eslint:recommended",
   "globals": {
     "chrome": true,
-    "$": true
+    "$": true,
+    "_": true
   },
 
   "rules": {

@@ -4,11 +4,12 @@ body {
     font: 14px/18px Open Sans,Arial,Helvetica,sans-serif;
 }
 tr {
-    whitespace: nowrap;
+    white-space: nowrap;
 }
 td {
     padding: 5px;
 }
+
 #requestResult, #connectResult {
     text-align: right;
     min-width: 60px;

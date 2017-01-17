@@ -48,10 +48,11 @@ function dbInit(dbKey, prepopulate) {
   return db;
 }
 
+let db;
 if (!chrome.tabs) { // populate the db with test data if launched in browser context
-  var db = dbInit('db', true);
+  db = dbInit('db', true);
 } else {
-  var db = dbInit('db');
+  db = dbInit('db');
 }
 
 

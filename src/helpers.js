@@ -1,5 +1,5 @@
 /*jshint bitwise: false*/
-"use strict";
+// "use strict";
 
 function hashCode(str) {
   if (str.length === 0) {

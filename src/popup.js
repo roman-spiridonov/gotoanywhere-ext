@@ -1,6 +1,5 @@
 "use strict";
 
-const extension = require('./extension');
 const GTASelect = require('./GTASelect').GTASelect;
 
 const db = require('./db').db;

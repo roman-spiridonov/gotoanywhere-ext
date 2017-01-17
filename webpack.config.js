@@ -1,3 +1,4 @@
+/* eslint-env node */
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 if (!isDevelopment) {
   console.log('Webpack: executing a production build!');
@@ -37,8 +38,14 @@ module.exports = {
       {
         test: /\.js$/,
         include: path.join(__dirname, 'src'),
-        loader: "jshint-loader"
+        loader: "jshint-loader",
+      },
+      {
+        test: /\.js$/,
+        include: path.join(__dirname, 'src'),
+        loader: "eslint-loader"
       }
+
     ],
     loaders: [
       {  // change code and its source map
@@ -83,9 +90,13 @@ module.exports = {
     extensions: ['', '.js']
   },
 
-  // Specific options
-  jshint: {
-    failOnHint: true
+  //Specific loaders
+  // jshint: {
+  //   failOnHint: true
+  // },
+  eslint: {
+    failOnWarning: true,
+    failOnError: true
   }
 
 };

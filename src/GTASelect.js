@@ -1,7 +1,6 @@
 "use strict";
 
 const _ = require('lodash');
-const extension = require('./extension');
 const db = require('./db/index').db;
 
 exports.GTASelect = function GTASelect() {

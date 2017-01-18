@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="popup.css"/>
+</head>
+<body>
+<h1>Go to Anywhere</h1>
+<p>Open with <b>Ctrl+Shift+A</b> and use auto-complete list below to fire any available action.</p>
+
+<p>Test connectivity with tabs:</p>
+<table>
+    <tr>
+        <td><button id="requestButton">One-time message</button></td>
+        <td><span id="requestResult"></span></td>
+    </tr>
+    <tr>
+        <td><button id="connectButton">Long-lived message</button></td>
+        <td><span id="connectResult"></span></td>
+    </tr>
+</table>
+
+
+<p>Auto-complete:</p>
+<form onsubmit="console.log('clicked submit!'); return false;">
+    <!--<input type="text"><br/>-->
+    <input type="select" class="search" id="search" autofocus>
+</form>
+
+
+<script src="vendor.js"></script>
+<script src="popup.js"></script>
+<script src="messagingTest.js"></script>
+
+<script type="text/template" id="option-template">
+    <div class="select__option">
+        <span class="select__type"><%=item.type%></span>
+        <span class="select__optionText"><%=item.text%></span>
+    </div>
+</script>
+</body>
+</html>

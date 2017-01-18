@@ -3,7 +3,6 @@
  */
 "use strict";
 
-// const db = require('./db/index').db;
 const extension = require('./extension');
 
 extension.updateTabs();
@@ -12,3 +11,6 @@ setInterval(() => {  // TODO: update on the fly instead of setInterval
   // db.dbInit();
   extension.updateTabs();
 }, 5000);
+
+
+exports.db = require('./db').db;

@@ -88,7 +88,8 @@
 
     // Custom Globals
     "globals"       : {         // additional predefined global variables
-        "$":true,
+        "$": true,
+        "_": true,
         "console": true,
         "chrome": true
     }

@@ -1,9 +1,13 @@
+/* global NODE_ENV */
 "use strict";
 
-const _ = require('lodash');
-const db = require('./db/index').db;
+// Rely on CDN version in production. NODE_ENV resolved via webpack.
+const template = NODE_ENV === 'development' ? require('lodash/template') : _.template;
 
-exports.GTASelect = function GTASelect() {
+// const db = require('./db').db;
+
+exports.GTASelect = function GTASelect(options) {
+  let _db = options.db;
   let _state;  // array of options
   let $el;
 
@@ -17,7 +21,7 @@ exports.GTASelect = function GTASelect() {
         return markup;
       },
       templateResult: function (item) {  // return item markup in options list (expanded)
-        let tmpl = _.template(document.getElementById('option-template').innerHTML, {'variable': 'item'});
+        let tmpl = template(document.getElementById('option-template').innerHTML, {'variable': 'item'});
         return tmpl(item);
       },
       templateSelection: function (item) {  // return selected item markup (collapsed)
@@ -48,17 +52,19 @@ exports.GTASelect = function GTASelect() {
   };
 
   this.update = function () {
-    if (chrome.tabs) {
-      db.refresh();
-    }
-    _state = db.get();
+    // if (chrome.tabs) {
+    //   db.refresh();
+    // }
+    _state = _db.get();
     console.dir(_state);
 
     if (_state.length > 0) {
       let currentData = $el.data('select2').results.data._currentData;
       let ids = currentData.map(el => el.id);
       _state.forEach(function (item) {
-        if (ids.indexOf(item.id) !== -1) { return; }
+        if (ids.indexOf(item.id) !== -1) {
+          return;
+        }
         setTimeout(() => {
           currentData.push(item);
         });

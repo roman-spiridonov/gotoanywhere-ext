@@ -12,11 +12,5 @@ setInterval(() => {  // TODO: update on the fly instead of setInterval
   extension.updateTabs();
 }, 5000);
 
-/* eslint-disable */
-function test() {
-  alert("AAA!");
-}
-exports.test = test;
-/* eslint-enable */
 
 exports.db = require('./db').db;

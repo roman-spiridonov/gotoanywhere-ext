@@ -23,9 +23,6 @@ chrome.runtime.getBackgroundPage(function (backgroundPage) {
 
     searchBox.open();
 
-    /* eslint-disable */
-    bg.test();
-    /* eslint-enable */
   });
 });
 

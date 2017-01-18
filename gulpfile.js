@@ -10,7 +10,10 @@ const del = require('del');
 const webpack = require('webpack');
 const jshint = require('gulp-jshint');
 
+const config = require('./config');
+
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
 if (!isDevelopment) {
   console.log('Gulp: executing a production build!');
 }
@@ -21,7 +24,7 @@ gulp.task('static', function () {
 });
 
 gulp.task('html', function () {  // TODO: rewrite using jsdom parser and using external config for lib-to-cdn links mapping
-  let htmlDir = isDevelopment ? 'src/html-dev/' : 'src/html-prod/';
+  let htmlDir = config.isCDN ? 'src/html-cdn/' : 'src/html/';
   console.log(htmlDir + '*.html');
 
   return gulp.src(htmlDir + '*.html', {buffer: false, since: gulp.lastRun('html')}).pipe(debug())

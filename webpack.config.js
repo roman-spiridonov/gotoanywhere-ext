@@ -6,6 +6,7 @@ if (!isDevelopment) {
 
 const webpack = require('webpack');
 const path = require('path');
+const config = require('./config');
 
 module.exports = {
   context: path.join(__dirname, 'src'),
@@ -82,14 +83,14 @@ module.exports = {
 
     // Chunks
     // new webpack.optimize.CommonsChunkPlugin({
-    //   name: "common",
-    //   // minChunks: 2,  // how many entry points should use a module to form a chunk?
-    //   chunks: ["background", "popup"]
+    //   name: "background",  // merge common chunks into background page
+    //   //minChunks: 2,  // how many entry points should use a module to form a chunk?
+    //   chunks: ["background", "popup", "messagingTest", "page"]
     // }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      chunks: ["vendor", "popup", "messagingTest"],
-      minChunks: Infinity  // how many entry points should use a module to form a chunk?
+      name: "vendor",  // additional common chunks with the list below will be merged into vendor.js entry point
+      chunks: [/*"vendor", */"popup", "messagingTest"],  // explicitly no background module as it will not have access to webpackJsop_name_() function
+      //minChunks: Infinity  // ensures that no other modules go into this chunk
     })
   ],
 
@@ -119,15 +120,18 @@ module.exports = {
 
 };
 
-
-// Additional production options
-if (!isDevelopment) {
+// Offline build (CDN resources)
+if(config.isCDN) {
   delete module.exports.entry.vendor;
   module.exports.plugins.pop();  // remove vendor chunk
   module.exports.externals = {  // use CDN versions
-      "jquery": "$",
-      "lodash": "_"
+    "jquery": "$",
+    "lodash": "_"
   };
+}
+
+// Additional production options
+if (!isDevelopment) {
   module.exports.plugins.push(
       new webpack.optimize.UglifyJsPlugin({
         compress: {

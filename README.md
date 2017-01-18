@@ -12,6 +12,7 @@ Or...
 ```
 npm install
 npm run dev
+npm run prod
 ```
 
 The resulting app will be in `webapp/` folder.

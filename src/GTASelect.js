@@ -4,9 +4,10 @@
 // Rely on CDN version in production. NODE_ENV resolved via webpack.
 const template = NODE_ENV === 'development' ? require('lodash/template') : _.template;
 
-const db = require('./db/index').db;
+// const db = require('./db').db;
 
-exports.GTASelect = function GTASelect() {
+exports.GTASelect = function GTASelect(options) {
+  let _db = options.db;
   let _state;  // array of options
   let $el;
 
@@ -54,7 +55,7 @@ exports.GTASelect = function GTASelect() {
     // if (chrome.tabs) {
     //   db.refresh();
     // }
-    _state = db.get();
+    _state = _db.get();
     console.dir(_state);
 
     if (_state.length > 0) {

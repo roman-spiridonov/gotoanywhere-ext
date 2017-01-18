@@ -16,7 +16,15 @@ if (!isDevelopment) {
 }
 
 gulp.task('static', function () {
-  return gulp.src('src/*.{css,html,png,json}', {buffer: false, since: gulp.lastRun('static')}).pipe(debug())
+  return gulp.src('src/*.{css,png,json}', {buffer: false, since: gulp.lastRun('static')}).pipe(debug())
+      .pipe(gulp.dest('webapp')).pipe(debug());
+});
+
+gulp.task('html', function () {  // TODO: rewrite using jsdom parser and using external config for lib-to-cdn links mapping
+  let htmlDir = isDevelopment ? 'src/html-dev/' : 'src/html-prod/';
+  console.log(htmlDir + '*.html');
+
+  return gulp.src(htmlDir + '*.html', {buffer: false, since: gulp.lastRun('html')}).pipe(debug())
       .pipe(gulp.dest('webapp')).pipe(debug());
 });
 
@@ -38,17 +46,34 @@ gulp.task('clean', function () {
 
 gulp.task('build', gulp.series(
     'clean',
-    gulp.parallel('static', 'webpack')
+    gulp.parallel('static', 'html', 'webpack')
 ));
 
-gulp.task('watch', function (callback) {
-  if (!isDevelopment) {
-    callback();
-  }
-  return gulp.watch('src/*.{css,html,png,json}', gulp.series('static'));  // webpack
-});
 
-gulp.task('default', gulp.series('build', 'watch'));
+if (isDevelopment) {
+  gulp.task('watch:static', function () {
+    return gulp.watch('src/*.{css,png,json}', gulp.series('static'));  // webpack
+  });
+
+  gulp.task('watch:html', function () {
+    return gulp.watch('src/**/*.html', gulp.series('html'));
+  });
+
+  gulp.task('watch:webpack_config', function (callback) {
+    if (!isDevelopment) {
+      callback();
+    }
+    return gulp.watch('./webpack.config.js', gulp.series('webpack'));  // webpack
+  });
+
+  gulp.task('watch', gulp.parallel('watch:static', 'watch:html', 'watch:webpack_config'));
+
+  gulp.task('default', gulp.series('build', 'watch'));
+
+} else {
+  gulp.task('default', gulp.series('build'));
+}
+
 
 gulp.task('jshint', function () {
   return gulp.src('src/*.js')

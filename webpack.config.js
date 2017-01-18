@@ -11,17 +11,20 @@ module.exports = {
   context: path.join(__dirname, 'src'),
   entry: {
     popup: './popup',  // extension's popup script
-    //background: './background',  // background script
+    background: ['./db', './background'], // background script
     page: './page',  // content script
     messagingTest: './messagingTest',
-    background: ['jquery', '..\\node_modules\\select2\\dist\\js\\select2.js', './background', './db/index.js']
+
+    // it is required to include all of jQuery plug-ins into the build
+    // for ProvidePlugin to be able to substitute require('jquery') statement for the usage of $
+    vendor: ['jquery', 'select2', 'lodash/template']  // see vendor/select2
   },
 
   output: {
     path: 'webapp',
     publicPath: '/',   // internet path for require.ensure
-    filename: '[name].js'
-    // library: '[name]'  // exports global var = [name] from each module
+    filename: '[name].js',
+    library: '[name]'  // exports global var = [name] from each module
   },
 
   watch: isDevelopment,
@@ -29,7 +32,8 @@ module.exports = {
     aggregateTimeout: 100
   },
 
-  devtool: isDevelopment ? "#cheap-module-inline-source-map" : null,  // other settings may not work for extension debugging
+  // other settings may not work for Chrome extension debugging
+  devtool: isDevelopment ? "#cheap-module-inline-source-map" : null,
 
   module: {
     preLoaders: [
@@ -62,7 +66,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg|json)$/i,
         loader: 'file?name=[path][name].[ext]'
       }],
-    noParse: /(jquery\.js|lodash\.js)/  // libs that don't need any parsing
+    noParse: /\/node_modules\/(jquery\.js|lodash\.js|select2\.full\.js)/  // libs that don't need any parsing (e.g. no require)
   },
 
   plugins: [
@@ -71,7 +75,9 @@ module.exports = {
     }),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({  // webpack will add require on free $ variable
-      $: 'jquery'
+      $: 'jquery',
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
     }),
 
     // Chunks
@@ -79,18 +85,19 @@ module.exports = {
     //   name: "common",
     //   // minChunks: 2,  // how many entry points should use a module to form a chunk?
     //   chunks: ["background", "popup"]
-    // })
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: "background",
+      name: "vendor",
+      chunks: ["vendor", "popup", "messagingTest"],
       minChunks: Infinity  // how many entry points should use a module to form a chunk?
     })
   ],
 
 
   resolve: {  // override defaults
-    root: path.join(__dirname, 'vendor'),  // add another root for require
+    root: path.join(__dirname, 'vendor'),  // add another root for require (in addition to node_modules)
     alias: {  // alias: path
-
+      'jquery': 'jquery/dist/jquery.js'  // webpack better optimizes source versions
     },
     moduleDirectories: ['node_modules'],
     extensions: ['', '.js']
@@ -106,7 +113,7 @@ module.exports = {
   //   failOnHint: true
   // },
   eslint: {
-    failOnWarning: true,
+    // failOnWarning: true,
     failOnError: true
   }
 
@@ -115,6 +122,8 @@ module.exports = {
 
 // Additional production options
 if (!isDevelopment) {
+  delete module.exports.entry.vendor;
+  module.exports.plugins.pop();  // remove vendor chunk
   module.exports.externals = {  // use CDN versions
       "jquery": "$",
       "lodash": "_"

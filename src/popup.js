@@ -23,6 +23,11 @@ chrome.runtime.getBackgroundPage(function (backgroundPage) {
 
     searchBox.open();
 
+    $('#link').click(() => {
+      chrome.tabs.create({url:'chrome://extensions/configureCommands'});
+      return false;
+    });
   });
+
 });
 

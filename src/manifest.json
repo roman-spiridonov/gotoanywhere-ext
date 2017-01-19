@@ -9,7 +9,8 @@
   },
   "permissions": [
     "tabs",
-    "bookmarks"
+    "bookmarks",
+    "*://*/*"
   ],
   "web_accessible_resources": [
     "*.js.map"
@@ -33,10 +34,10 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Ctrl+Shift+A",
-        "mac": "Ctrl+Shift+A",
-        "chromeos": "Ctrl+Shift+A",
-        "linux": "Ctrl+Shift+A"
+        "windows": "Ctrl+Space",
+        "mac": "Command+Space",
+        "chromeos": "Ctrl+Space",
+        "linux": "Ctrl+Space"
       }
     }
   },

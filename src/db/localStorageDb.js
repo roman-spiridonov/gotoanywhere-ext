@@ -64,6 +64,7 @@ function LocalStorageDb(options) {
     return new DbWrapper({data: _parseDbStr(curDbStr)});
   }
 
+
   function _parseDbStr(curDbStr) {
     let curDb = [];
     if (curDbStr) {  // if not empty

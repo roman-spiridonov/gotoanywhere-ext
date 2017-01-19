@@ -1,33 +1,41 @@
 "use strict";
 
-const helpers = require('./helpers');
 const db = require('./db').db;
 
 /**
  * Scans tabs and saves to local storage.
  */
-function updateTabs() {  // TODO: handle removal of tabs
+function updateTabs(commit = false) {  // TODO: handle removal of tabs
   if (!chrome.tabs) {  // execute only in extension context
     return;
   }
   chrome.tabs.query({}, function (tabs) {
-    tabs.forEach(function (tab) {  // async forEach
-      setTimeout(() => {
-        let dbEntry = {
-          id: String(helpers.hashCode(JSON.stringify(tab))),
-          source: "tab",
-          type: "tab",
-          selectedText: tab.title,
-          text: tab.url + '\n' + tab.title,
-          tab: tab
-        };
-        console.log("Saving tab to localStorage: ", tab.title);
-        db.push(dbEntry);
-        // db.save();
-      }, 0);
-    });
+    setTimeout(tabs.forEach(
+        tab => updateTab(tab, commit)
+    ), 0);
   });
 }
 
+function updateTab(tab, commit = false) {
+  let dbEntry = {
+    id: String(tab.id),
+    source: "tab",
+    type: "tab",
+    selectedText: tab.title,
+    text: tab.url + '\n' + tab.title,
+    tab: tab
+  };
+  console.log("Saving tab: ", tab.id, tab.title);
+  db.push(dbEntry);
+  if (commit) db.save();
+}
+
+function removeTab(tab, commit = false) {
+  db.delete(tab);
+  console.log("Removing tab: ", tab.id, tab.title);
+  if (commit) db.save();
+}
 
 exports.updateTabs = updateTabs;
+exports.updateTab = updateTab;
+exports.removeTab = removeTab;

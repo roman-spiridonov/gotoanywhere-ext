@@ -8,10 +8,19 @@ if(window === chrome.extension.getBackgroundPage()) {  // execute only if in the
 
   extension.updateTabs();
 
-  setInterval(() => {  // TODO: update on the fly instead of setInterval
-    // db.dbInit();
-    extension.updateTabs();
-  }, 5000);
+  chrome.tabs.onCreated.addListener(function (tab) {
+    extension.updateTab(tab);
+  });
+
+  chrome.tabs.onUpdated.addListener(function (tabId) {
+    chrome.tabs.get(tabId, tab => extension.updateTab(tab));
+  });
+
+  chrome.tabs.onRemoved.addListener(function (tabId) {
+    chrome.tabs.get(tabId, tab => extension.updateTab(tab));
+  });
+
+
 }
 
 exports.db = require('./db').db;

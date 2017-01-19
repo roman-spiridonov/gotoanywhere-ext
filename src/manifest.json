@@ -9,8 +9,7 @@
   },
   "permissions": [
     "tabs",
-    "bookmarks",
-    "*://*/*"
+    "bookmarks"
   ],
   "web_accessible_resources": [
     "*.js.map"

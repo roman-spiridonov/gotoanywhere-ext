@@ -1,8 +1,8 @@
-/* global NODE_ENV */
+/* global isCDN */
 "use strict";
 
 // Rely on CDN version in production. NODE_ENV resolved via webpack.
-const template = NODE_ENV === 'development' ? require('lodash/template') : _.template;
+const template = isCDN ? _.template : require('lodash/template');
 
 // const db = require('./db').db;
 

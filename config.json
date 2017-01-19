@@ -1,3 +1,6 @@
 {
-  "isCDN": false
+  "isCDN": false,
+  "output": "webapp",
+  "release": "release",
+  "pem": "release/gta.pem"
 }

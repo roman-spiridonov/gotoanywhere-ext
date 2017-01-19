@@ -72,7 +72,8 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify(isDevelopment ? "development" : "production")  // use NODE_ENV as constant in code
+      NODE_ENV: JSON.stringify(isDevelopment ? "development" : "production"),  // use NODE_ENV as constant in code
+      isCDN: config.isCDN
     }),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({  // webpack will add require on free $ variable
